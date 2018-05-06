@@ -6,7 +6,7 @@ class MatrixOperations
       line = []
 
       height.times do
-        cell = Cell.new('', false, false)
+        cell = Models::Cell.new('', false, false)
         line.push(cell)
       end
 
@@ -34,7 +34,7 @@ class MatrixOperations
 
   def self.insert_mines(matrix, bomb_coordinates)
     bomb_coordinates.each do |bomb_coordinate|
-      cell = Cell.new('#', false, false)
+      cell = Models::Cell.new('#', false, false)
       matrix[bomb_coordinate[:width]][bomb_coordinate[:height]] = cell
     end
 

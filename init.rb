@@ -1,5 +1,5 @@
 require './engine/utils/pretty_printer'
-require './engine/controllers/minesweeper_controller'
+require './engine/controllers/minesweeper'
 
 class Init
   def self.execute
@@ -10,18 +10,18 @@ class Init
     puts 'Digite a quantidade de minas'
     quantity_mines = gets.to_i
 
-    game = Minesweeper.new(lines, columns, quantity_mines)
+    game = Models::Minesweeper.new(lines, columns, quantity_mines)
 
     while game.still_playing?
-      PrettyPrinter.print_matrix(game.matrix)
+      Utils::PrettyPrinter.print_matrix(game.matrix)
 
       puts 'Digite 0 para revelar uma célula, ou 1 para adicionar uma bandeira'
       option = gets.to_i
 
       if option == 0
-        MinesweeperController.cell_reveal(game)
+        Controllers::Minesweeper.cell_reveal(game)
       else option == 1
-        MinesweeperController.add_flag(game)
+        Controllers::Minesweeper.add_flag(game)
       end
     end
 
@@ -30,7 +30,7 @@ class Init
       puts 'Você venceu!'
     else
       puts 'Você perdeu! As minas eram:'
-      PrettyPrinter.print_matrix_end_game(game.matrix)
+      Utils::PrettyPrinter.print_matrix_end_game(game.matrix)
     end
   end
 end
