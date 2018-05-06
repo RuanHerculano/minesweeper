@@ -59,7 +59,7 @@ class Minesweeper
       line = []
 
       @height.times do
-        cell = Cell.new('.', false, false)
+        cell = Cell.new('', false, false)
         line.push(cell)
       end
 
@@ -101,12 +101,12 @@ class Minesweeper
   def play(line, column)
     success = false
 
-    if @matrix[line][column].content == '.'
-      @matrix[line][column].content = ''
+    if !@matrix[line][column].is_clear && !@matrix[line][column].is_flag && @matrix[line][column].content == ''
+      @matrix[line][column].is_clear = true
       check_arround_cells(line, column)
       check_victory
       success = true
-    else
+    elsif !@matrix[line][column].is_clear && !@matrix[line][column].is_flag && @matrix[line][column].content == '#'
       @still_playing = false
     end
 
@@ -128,126 +128,126 @@ class Minesweeper
 
   def check_arround_cells(line, column)
     if line == 0 && column == 0
-      if @matrix[line + 1][column].content == '.' &&
-        @matrix[line][column + 1].content == '.' &&
-          @matrix[line + 1][column + 1].content == '.'
+      if @matrix[line + 1][column].content == '' &&
+        @matrix[line][column + 1].content == '' &&
+          @matrix[line + 1][column + 1].content == ''
 
-        @matrix[line + 1][column].content = ''
-        @matrix[line][column + 1].content = ''
-        @matrix[line + 1][column + 1].content = ''
+        @matrix[line + 1][column].is_clear = true
+        @matrix[line][column + 1].is_clear = true
+        @matrix[line + 1][column + 1].is_clear = true
 
         increment_num_unarmed_mines(3)
       end
     elsif line == @width - 1 && column == 0
-      if @matrix[line - 1][column].content == '.' &&
-        @matrix[line][column + 1].content == '.' &&
-          @matrix[line - 1][column + 1].content == '.'
+      if @matrix[line - 1][column].content == '' &&
+        @matrix[line][column + 1].content == '' &&
+          @matrix[line - 1][column + 1].content == ''
 
-        @matrix[line - 1][column].content = ''
-        @matrix[line][column + 1].content = ''
-        @matrix[line - 1][column + 1].content = ''
+        @matrix[line - 1][column].is_clear = true
+        @matrix[line][column + 1].is_clear = true
+        @matrix[line - 1][column + 1].is_clear = true
 
         increment_num_unarmed_mines(3)
       end
     elsif line == 0 && column == @height - 1
-      if @matrix[line][column - 1].content == '.' &&
-        @matrix[line + 1][column].content == '.' &&
-          @matrix[line + 1][column - 1].content == '.'
+      if @matrix[line][column - 1].content == '' &&
+        @matrix[line + 1][column].content == '' &&
+          @matrix[line + 1][column - 1].content == ''
 
-        @matrix[line][column - 1].content = ''
-        @matrix[line + 1][column].content = ''
-        @matrix[line + 1][column - 1].content = ''
+        @matrix[line][column - 1].is_clear = true
+        @matrix[line + 1][column].is_clear = true
+        @matrix[line + 1][column - 1].is_clear = true
         increment_num_unarmed_mines(3)
       end
     elsif line == @width - 1 && column == @height - 1
-      if @matrix[line - 1][column].content == '.' &&
-        @matrix[line][column - 1].content == '.' &&
-          @matrix[line - 1][column - 1].content == '.'
+      if @matrix[line - 1][column].content == '' &&
+        @matrix[line][column - 1].content == '' &&
+          @matrix[line - 1][column - 1].content == ''
 
-        @matrix[line - 1][column].content = ''
-        @matrix[line][column - 1].content = ''
-        @matrix[line - 1][column - 1].content = ''
+        @matrix[line - 1][column].is_clear = true
+        @matrix[line][column - 1].is_clear = true
+        @matrix[line - 1][column - 1].is_clear = true
 
         increment_num_unarmed_mines(3)
       end
     elsif line == 0
-      if @matrix[line][column - 1].content == '.' &&
-        @matrix[line + 1][column - 1].content == '.' &&
-          @matrix[line + 1][column].content == '.' &&
-            @matrix[line + 1][column + 1].content == '.' &&
-              @matrix[line][column + 1].content == '.'
+      if @matrix[line][column - 1].content == '' &&
+        @matrix[line + 1][column - 1].content == '' &&
+          @matrix[line + 1][column].content == '' &&
+            @matrix[line + 1][column + 1].content == '' &&
+              @matrix[line][column + 1].content == ''
 
-        @matrix[line][column - 1].content = ''
-        @matrix[line + 1][column - 1].content = ''
-        @matrix[line + 1][column].content = ''
-        @matrix[line + 1][column + 1].content = ''
-        @matrix[line][column + 1].content = ''
+        @matrix[line][column - 1].is_clear = true
+        @matrix[line + 1][column - 1].is_clear = true
+        @matrix[line + 1][column].is_clear = true
+        @matrix[line + 1][column + 1].is_clear = true
+        @matrix[line][column + 1].is_clear = true
 
         increment_num_unarmed_mines(5)
       end
     elsif column == 0
-      if @matrix[line -1][column].content == '.' &&
-        @matrix[line - 1][column + 1].content == '.' &&
-          @matrix[line][column + 1].content == '.' &&
-            @matrix[line + 1][column + 1].content == '.' &&
-              @matrix[line + 1][column].content == '.'
+      if @matrix[line -1][column].content == '' &&
+        @matrix[line - 1][column + 1].content == '' &&
+          @matrix[line][column + 1].content == '' &&
+            @matrix[line + 1][column + 1].content == '' &&
+              @matrix[line + 1][column].content == ''
 
-        @matrix[line -1][column].content = ''
-        @matrix[line - 1][column + 1].content = ''
-        @matrix[line][column + 1].content = ''
-        @matrix[line + 1][column + 1].content = ''
-        @matrix[line + 1][column].content = ''
+        @matrix[line -1][column].is_clear = true
+        @matrix[line - 1][column + 1].is_clear = true
+        @matrix[line][column + 1].is_clear = true
+        @matrix[line + 1][column + 1].is_clear = true
+        @matrix[line + 1][column].is_clear = true
 
         increment_num_unarmed_mines(5)
       end
     elsif line == @width - 1
-      if @matrix[line][column - 1].content == '.' &&
-        @matrix[line - 1][column - 1].content == '.' &&
-          @matrix[line - 1][column].content == '.' &&
-            @matrix[line - 1][column + 1].content == '.' &&
-              @matrix[line][column + 1].content == '.'
+      if @matrix[line][column - 1].content == '' &&
+        @matrix[line - 1][column - 1].content == '' &&
+          @matrix[line - 1][column].content == '' &&
+            @matrix[line - 1][column + 1].content == '' &&
+              @matrix[line][column + 1].content == ''
 
-        @matrix[line][column - 1].content = ''
-        @matrix[line - 1][column - 1].content = ''
-        @matrix[line - 1][column].content = ''
-        @matrix[line - 1][column + 1].content = ''
-        @matrix[line][column + 1].content = ''
+        @matrix[line][column - 1].is_clear = true
+        @matrix[line - 1][column - 1].is_clear = true
+        @matrix[line - 1][column].is_clear = true
+        @matrix[line - 1][column + 1].is_clear = true
+        @matrix[line][column + 1].is_clear = true
 
         increment_num_unarmed_mines(5)
       end
     elsif column == @height - 1
-      if @matrix[line - 1][column].content == '.' &&
-        @matrix[line - 1][column - 1].content == '.' &&
-          @matrix[line][column - 1].content == '.' &&
-            @matrix[line + 1][column - 1].content == '.' &&
-              @matrix[line + 1][column].content == '.'
+      if @matrix[line - 1][column].content == '' &&
+        @matrix[line - 1][column - 1].content == '' &&
+          @matrix[line][column - 1].content == '' &&
+            @matrix[line + 1][column - 1].content == '' &&
+              @matrix[line + 1][column].content == ''
 
-        @matrix[line - 1][column].content = ''
-        @matrix[line - 1][column - 1].content = ''
-        @matrix[line][column - 1].content = ''
-        @matrix[line + 1][column - 1].content = ''
-        @matrix[line + 1][column].content = ''
+        @matrix[line - 1][column].is_clear = true
+        @matrix[line - 1][column - 1].is_clear = true
+        @matrix[line][column - 1].is_clear = true
+        @matrix[line + 1][column - 1].is_clear = true
+        @matrix[line + 1][column].is_clear = true
 
         increment_num_unarmed_mines(5)
       end
     else
-      if @matrix[line][column - 1].content == '.' &&
-        @matrix[line][column + 1].content == '.' &&
-          @matrix[line - 1][column].content == '.' &&
-            @matrix[line + 1][column].content == '.' &&
-              @matrix[line - 1][column - 1].content == '.' &&
-                @matrix[line - 1][column + 1].content == '.' &&
-                  @matrix[line + 1][column - 1].content == '.' &&
-                    @matrix[line + 1][column + 1].content == '.'
+      if @matrix[line][column - 1].content == '' &&
+        @matrix[line][column + 1].content == '' &&
+          @matrix[line - 1][column].content == '' &&
+            @matrix[line + 1][column].content == '' &&
+              @matrix[line - 1][column - 1].content == '' &&
+                @matrix[line - 1][column + 1].content == '' &&
+                  @matrix[line + 1][column - 1].content == '' &&
+                    @matrix[line + 1][column + 1].content == ''
 
-        @matrix[line][column - 1].content = ''
-        @matrix[line][column + 1].content = ''
-        @matrix[line - 1][column].content = ''
-        @matrix[line + 1][column].content = ''
-        @matrix[line - 1][column - 1].content = ''
-        @matrix[line - 1][column + 1].content = ''
-        @matrix[line + 1][column - 1].content = ''
-        @matrix[line + 1][column + 1].content = ''
+        @matrix[line][column - 1].is_clear = true
+        @matrix[line][column + 1].is_clear = true
+        @matrix[line - 1][column].is_clear = true
+        @matrix[line + 1][column].is_clear = true
+        @matrix[line - 1][column - 1].is_clear = true
+        @matrix[line - 1][column + 1].is_clear = true
+        @matrix[line + 1][column - 1].is_clear = true
+        @matrix[line + 1][column + 1].is_clear = true
 
         increment_num_unarmed_mines(8)
       end
@@ -266,7 +266,7 @@ class Minesweeper
       for column in 0...quantity_columns
         arround_mines = 0
 
-        if @matrix[line][column].content == ''
+        if @matrix[line][column].is_clear
           if line == 0 && column == 0
             if @matrix[line + 1][column].content == '#'
               arround_mines += 1
@@ -431,6 +431,8 @@ class Minesweeper
           end
 
           line_elements.push(arround_mines.to_s)
+        elsif @matrix[line][column].is_flag == true
+          line_elements.push('F')
         else
           line_elements.push('.')
         end
@@ -446,12 +448,39 @@ class Minesweeper
     success = false
     cell = @matrix[line][column]
 
-    unless cell.is_clear
+    return success if cell.is_clear
+
+    if cell.is_flag
+      cell.is_flag = false
+    else
       cell.is_flag = true
-      success = true
     end
 
+    success = true
+
     success
+  end
+end
+
+class Main
+  def self.add_flag(game)
+    puts "Digite a coordenada da linha"
+    line = gets.to_i
+
+    puts "Digite a coordenada da coluna"
+    column = gets.to_i
+
+    game.flag(line, column)
+  end
+
+  def self.cell_reveal(game)
+    puts "Digite a coordenada da linha"
+    line = gets.to_i
+
+    puts "Digite a coordenada da coluna"
+    column = gets.to_i
+
+    game.play(line, column)
   end
 end
 
@@ -462,13 +491,15 @@ game = Minesweeper.new(width, height, num_mines)
 
 while game.still_playing?
   PrettyPrinter.print_matrix(game.board_state)
-  puts "Digite a coordenada da linha"
-  line = gets.to_i
 
-  puts "Digite a coordenada da coluna"
-  column = gets.to_i
+  puts "Digite 0 para revelar uma célula, ou 1 para adicionar uma bandeira"
+  option = gets.to_i
 
-  game.play(line, column)
+  if option == 0
+    Main.cell_reveal(game)
+  else option == 1
+    Main.add_flag(game)
+  end
 end
 
 
