@@ -48,14 +48,14 @@ class Minesweeper
     @still_playing
   end
 
-  def play(x, y)
+  def play(line, column)
     success = false
 
-    if @matrix[x][y] == '.'
-      @matrix[x][y] = ''
-      check_arround_cells(x, y)
+    if @matrix[line][column] == '.'
+      @matrix[line][column] = ''
+      check_arround_cells(line, column)
       success = true
-    elsif @matrix[x][y] == '#'
+    elsif @matrix[line][column] == '#'
       @still_playing = false
     end
 
@@ -108,33 +108,33 @@ class Minesweeper
         @matrix[line + 1][column] = ''
       end
     elsif line == @width - 1
-      if @matrix[line][column - 1] == '.' && @matrix[line - 1][column - 1] == '.' && @matrix[line - 1][column] == '.' && @matrix[line + 1][column + 1] == '.' && @matrix[line][column + 1] == '.'
+      if @matrix[line][column - 1] == '.' && @matrix[line - 1][column - 1] == '.' && @matrix[line - 1][column] == '.' && @matrix[line - 1][column + 1] == '.' && @matrix[line][column + 1] == '.'
         @matrix[line][column - 1] = ''
         @matrix[line - 1][column - 1] = ''
         @matrix[line - 1][column] = ''
-        @matrix[line + 1][column + 1] = ''
+        @matrix[line - 1][column + 1] = ''
         @matrix[line][column + 1] = ''
       end
     elsif column == @height - 1
-      if @matrix[line - 1][column] == '.' && @matrix[line - 1][column - 1] == '.' && @matrix[line][column - 1] == '.' && @matrix[line + 1][column + 1] == '.' && @matrix[line + 1][column] == '.'
+      if @matrix[line - 1][column] == '.' && @matrix[line - 1][column - 1] == '.' && @matrix[line][column - 1] == '.' && @matrix[line + 1][column - 1] == '.' && @matrix[line + 1][column] == '.'
         @matrix[line - 1][column] = ''
         @matrix[line - 1][column - 1] = ''
         @matrix[line][column - 1] = ''
-        @matrix[line + 1][column + 1] = ''
+        @matrix[line + 1][column - 1] = ''
         @matrix[line + 1][column] = ''
       end
     end
   end
 
-  def flag(x, y)
+  def flag(line, column)
     success = false
-    cell = @matrix[x][y]
+    cell = @matrix[line][column]
 
     if cell == '.' || cell == '#'
-      @matrix[x][y].concat('F')
+      @matrix[line][column].concat('F')
       success = true
     elsif cell == '.F' || cell == '#F'
-      @matrix[x][y] = cell[0]
+      @matrix[line][column] = cell[0]
       success = true
     end
 
