@@ -123,6 +123,21 @@ class Minesweeper
         @matrix[line + 1][column - 1] = ''
         @matrix[line + 1][column] = ''
       end
+    else
+      if @matrix[line][column - 1] == '.' && @matrix[line][column + 1] == '.' &&
+          @matrix[line - 1][column] == '.' && @matrix[line + 1][column] == '.' &&
+            @matrix[line - 1][column - 1] == '.' && @matrix[line - 1][column + 1] == '.' &&
+              @matrix[line + 1][column - 1] == '.' && @matrix[line + 1][column + 1] == '.'
+
+        @matrix[line][column - 1] = ''
+        @matrix[line][column + 1] = ''
+        @matrix[line - 1][column] = ''
+        @matrix[line + 1][column] = ''
+        @matrix[line - 1][column - 1] = ''
+        @matrix[line - 1][column + 1] = ''
+        @matrix[line + 1][column - 1] = ''
+        @matrix[line + 1][column + 1] = ''
+      end
     end
   end
 
