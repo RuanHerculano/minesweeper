@@ -25,9 +25,9 @@ module Controllers
         option = Inputs::Console.option_input_param
 
         if option == 0
-          Controllers::Minesweeper.cell_reveal(game)
+          cell_reveal(game)
         elsif option == 1
-          Controllers::Minesweeper.add_flag(game)
+          add_flag(game)
         else
           puts 'Opção inválida'
         end
