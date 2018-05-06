@@ -1,36 +1,4 @@
-require 'matrix'
-require 'byebug'
-
-class PrettyPrinter
-  def self.print_matrix(matrix)
-    quantity_lines   = matrix.count
-    quantity_columns = matrix.first.count
-
-    for line in 0...quantity_lines
-      for column in 0...quantity_columns
-        print '[ '
-
-        print matrix[line][column]
-
-        print ' ]'
-      end
-
-      puts
-    end
-  end
-end
-
-class Cell
-  attr_accessor :content
-  attr_accessor :is_clear
-  attr_accessor :is_flag
-
-  def initialize(content, is_clear, is_flag)
-    @content = content
-    @is_clear = is_clear
-    @is_flag = is_flag
-  end
-end
+require './models/cell'
 
 class Minesweeper
   attr_accessor :width
@@ -50,6 +18,183 @@ class Minesweeper
     @victory = false
     @num_unarmed_mines = 0
     insert(bomb_coordinates)
+    build_arround_mines
+  end
+
+  def build_arround_mines
+    quantity_lines   = @matrix.count
+    quantity_columns = @matrix.first.count
+
+    for line in 0...quantity_lines
+      for column in 0...quantity_columns
+        arround_mines = 0
+
+        if line == 0 && column == 0
+          if @matrix[line + 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column + 1].content == '#'
+            arround_mines += 1
+          end
+        elsif line == @width - 1 && column == 0
+          if @matrix[line - 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column + 1].content == '#'
+            arround_mines += 1
+          end
+        elsif line == 0 && column == @height - 1
+          if @matrix[line][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+        elsif line == @width - 1 && column == @height - 1
+          if @matrix[line - 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column - 1].content == '#'
+            arround_mines += 1
+          end
+        elsif line == 0
+          if @matrix[line][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line][column + 1].content == '#'
+            arround_mines += 1
+          end
+        elsif column == 0
+          if @matrix[line - 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column].content == '#'
+            arround_mines += 1
+          end
+        elsif line == @width - 1
+          if @matrix[line][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line][column + 1].content == '#'
+            arround_mines += 1
+          end
+        elsif column == @height - 1
+          if @matrix[line - 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column].content == '#'
+            arround_mines += 1
+          end
+        else
+          if @matrix[line][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line - 1][column + 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column - 1].content == '#'
+            arround_mines += 1
+          end
+
+          if @matrix[line + 1][column + 1].content == '#'
+            arround_mines += 1
+          end
+        end
+
+        @matrix[line][column].arround_mines = arround_mines
+      end
+    end
   end
 
   def build_matrix
@@ -254,196 +399,6 @@ class Minesweeper
     end
   end
 
-
-  def board_state
-    matrix = []
-    quantity_lines   = @matrix.count
-    quantity_columns = @matrix.first.count
-
-    for line in 0...quantity_lines
-      line_elements = []
-
-      for column in 0...quantity_columns
-        arround_mines = 0
-
-        if @matrix[line][column].is_clear
-          if line == 0 && column == 0
-            if @matrix[line + 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column + 1].content == '#'
-              arround_mines += 1
-            end
-          elsif line == @width - 1 && column == 0
-            if @matrix[line - 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column + 1].content == '#'
-              arround_mines += 1
-            end
-          elsif line == 0 && column == @height - 1
-            if @matrix[line][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-          elsif line == @width - 1 && column == @height - 1
-            if @matrix[line - 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column - 1].content == '#'
-              arround_mines += 1
-            end
-          elsif line == 0
-            if @matrix[line][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line][column + 1].content == '#'
-              arround_mines += 1
-            end
-          elsif column == 0
-            if @matrix[line - 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column].content == '#'
-              arround_mines += 1
-            end
-          elsif line == @width - 1
-            if @matrix[line][column - 1].content == '.#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line][column + 1].content == '#'
-              arround_mines += 1
-            end
-          elsif column == @height - 1
-            if @matrix[line - 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column].content == '#'
-              arround_mines += 1
-            end
-          else
-            if @matrix[line][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line - 1][column + 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column - 1].content == '#'
-              arround_mines += 1
-            end
-
-            if @matrix[line + 1][column + 1].content == '#'
-              arround_mines += 1
-            end
-          end
-
-          line_elements.push(arround_mines.to_s)
-        elsif @matrix[line][column].is_flag == true
-          line_elements.push('F')
-        else
-          line_elements.push('.')
-        end
-      end
-
-      matrix.push(line_elements)
-    end
-
-    matrix
-  end
-
   def flag(line, column)
     success = false
     cell = @matrix[line][column]
@@ -461,62 +416,3 @@ class Minesweeper
     success
   end
 end
-
-class Main
-  def self.add_flag(game)
-    puts "Digite a coordenada da linha"
-    line = gets.to_i
-
-    puts "Digite a coordenada da coluna"
-    column = gets.to_i
-
-    game.flag(line, column)
-  end
-
-  def self.cell_reveal(game)
-    puts "Digite a coordenada da linha"
-    line = gets.to_i
-
-    puts "Digite a coordenada da coluna"
-    column = gets.to_i
-
-    game.play(line, column)
-  end
-end
-
-width = 4
-height = 4
-num_mines = 1
-game = Minesweeper.new(width, height, num_mines)
-
-while game.still_playing?
-  PrettyPrinter.print_matrix(game.board_state)
-
-  puts "Digite 0 para revelar uma célula, ou 1 para adicionar uma bandeira"
-  option = gets.to_i
-
-  if option == 0
-    Main.cell_reveal(game)
-  else option == 1
-    Main.add_flag(game)
-  end
-end
-
-
-puts "Fim do jogo!"
-if game.victory?
-  puts "Você venceu!"
-else
-  puts "Você perdeu! As minas eram:"
-  # PrettyPrinter.new.print(game.board_state(xray: true))
-end
-
-# while !game.still_playing?
-#   valid_move = game.play(0, 0)
-#   valid_flag = game.flag(rand(width), rand(height))
-
-#   if valid_move or valid_flag
-#     printer = (rand > 0.5) ? SimplePrinter.new : PrettyPrinter.new
-#     printer.print(game.board_stat e(
-#   end
-# end
