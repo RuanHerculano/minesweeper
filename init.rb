@@ -30,7 +30,7 @@ class Init
       puts 'Você venceu!'
     else
       puts 'Você perdeu! As minas eram:'
-      # PrettyPrinter.new.print(game.board_state(xray: true))
+      PrettyPrinter.print_matrix_end_game(game.matrix)
     end
   end
 end
