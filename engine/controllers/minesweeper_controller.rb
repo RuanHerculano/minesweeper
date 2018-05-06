@@ -1,4 +1,4 @@
-require './models/minesweeper'
+require './engine/models/minesweeper'
 
 class MinesweeperController
   def self.add_flag(game)

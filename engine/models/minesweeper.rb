@@ -1,23 +1,23 @@
-require './models/cell'
+require './engine/models/cell'
 require './libs/matrix_operations'
 
 class Minesweeper
-  attr_accessor :width
-  attr_accessor :height
-  attr_accessor :num_mines
+  attr_accessor :lines
+  attr_accessor :columns
+  attr_accessor :quantity_mines
   attr_accessor :matrix
   attr_accessor :still_playing
   attr_accessor :victory
   attr_accessor :num_unarmed_mines
 
-  def initialize(width, height, num_mines)
-    @width = width
-    @height = height
-    @num_mines = num_mines
+  def initialize(lines, columns, quantity_mines)
+    @lines = lines
+    @columns = columns
+    @quantity_mines = quantity_mines
     @still_playing = true
     @victory = false
     @num_unarmed_mines = 0
-    @matrix = MatrixOperations.build_matrix(width, height, num_mines)
+    @matrix = MatrixOperations.build_matrix(lines, columns, quantity_mines)
   end
 
   def still_playing?
@@ -26,6 +26,15 @@ class Minesweeper
 
   def victory?
     @victory
+  end
+
+  def check_victory
+    increment_num_unarmed_mines(1)
+
+    if @num_unarmed_mines == (@lines * @columns) - @quantity_mines
+      @victory = true
+      @still_playing = false
+    end
   end
 
   def play(line, column)
@@ -45,22 +54,13 @@ class Minesweeper
     success
   end
 
-  def check_victory
-    increment_num_unarmed_mines(1)
-
-    if @num_unarmed_mines == (@width * @height) - @num_mines
-      @victory = true
-      @still_playing = false
-    end
-  end
-
   def increment_num_unarmed_mines(quantity_mines)
     @num_unarmed_mines += quantity_mines
   end
 
   def flag(line, column)
     success = false
-    cell = @matrix[line][column]
+    cell    = @matrix[line][column]
 
     return success if cell.is_clear
 

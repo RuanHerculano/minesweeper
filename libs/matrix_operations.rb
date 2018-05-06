@@ -1,5 +1,5 @@
 class MatrixOperations
-  def self.build_matrix(width, height, num_mines)
+  def self.build_matrix(width, height, quantity_mines)
     matrix = []
 
     width.times do
@@ -13,15 +13,15 @@ class MatrixOperations
       matrix.push(line)
     end
 
-    matrix_with_mines = insert_mines(matrix, mines_coordinates(width, height, num_mines))
+    matrix_with_mines = insert_mines(matrix, mines_coordinates(width, height, quantity_mines))
 
     build_quantity_mines_around(matrix_with_mines)
   end
 
-  def self.mines_coordinates(width, height, num_mines)
+  def self.mines_coordinates(width, height, quantity_mines)
     coordinates = []
 
-    num_mines.times do
+    quantity_mines.times do
       coordinate = { width: rand(width), height: rand(height) }
 
       if !coordinates.include?(coordinate) || coordinates.empty?

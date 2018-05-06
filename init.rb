@@ -1,12 +1,16 @@
-require './utils/pretty_printer'
-require './controllers/minesweeper_controller'
+require './engine/utils/pretty_printer'
+require './engine/controllers/minesweeper_controller'
 
 class Init
   def self.execute
-    width = 4
-    height = 4
-    num_mines = 1
-    game = Minesweeper.new(width, height, num_mines)
+    puts 'Digite a quantidade de linhas da matriz'
+    lines = gets.to_i
+    puts 'Digite a quantidade de colunas da matriz'
+    columns = gets.to_i
+    puts 'Digite a quantidade de minas'
+    quantity_mines = gets.to_i
+
+    game = Minesweeper.new(lines, columns, quantity_mines)
 
     while game.still_playing?
       PrettyPrinter.print_matrix(game.matrix)
@@ -32,5 +36,3 @@ class Init
 end
 
 Init.execute
-
-
