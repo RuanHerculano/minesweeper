@@ -1,8 +1,25 @@
 require 'matrix'
 require 'byebug'
 
+class Cell
+  attr_accessor :content
+  attr_accessor :is_clear
+  attr_accessor :is_flag
+
+  def initialize(content, is_clear, is_flag)
+    @content = content
+    @is_clear = is_clear
+    @is_flag = is_flag
+  end
+end
+
 class Minesweeper
-  attr_accessor :width, :height, :num_mines, :matrix, :still_playing, :victory
+  attr_accessor :width
+  attr_accessor :height
+  attr_accessor :num_mines
+  attr_accessor :matrix
+  attr_accessor :still_playing
+  attr_accessor :victory
 
   def initialize(width, height, num_mines)
     @width = width
@@ -18,7 +35,14 @@ class Minesweeper
     matrix = []
 
     @width.times do
-      matrix.push(Array.new(@height, '.'))
+      line = []
+
+      @height.times do
+        cell = Cell.new('.', false, false)
+        line.push(cell)
+      end
+
+      matrix.push(line)
     end
 
     matrix
@@ -40,7 +64,8 @@ class Minesweeper
 
   def insert(bomb_coordinates)
     bomb_coordinates.each do |bomb_coordinate|
-      @matrix[bomb_coordinate[:width]][bomb_coordinate[:height]] = '#'
+      cell = Cell.new('#', false, false)
+      @matrix[bomb_coordinate[:width]][bomb_coordinate[:height]] = cell
     end
   end
 
@@ -51,11 +76,11 @@ class Minesweeper
   def play(line, column)
     success = false
 
-    if @matrix[line][column] == '.'
-      @matrix[line][column] = ''
+    if @matrix[line][column].content == '.'
+      @matrix[line][column].content = ''
       check_arround_cells(line, column)
       success = true
-    elsif @matrix[line][column] == '#'
+    elsif @matrix[line][column].content == '#'
       @still_playing = false
     end
 
@@ -63,80 +88,112 @@ class Minesweeper
   end
 
   def check_arround_cells(line, column)
-    # 1° siperior esquerda
     if line == 0 && column == 0
-      if @matrix[line + 1][column] == '.' && @matrix[line][column + 1] == '.' && @matrix[line + 1][column + 1] == '.'
-        @matrix[line + 1][column] = ''
-        @matrix[line][column + 1] = ''
-        @matrix[line + 1][column + 1] = ''
+      if @matrix[line + 1][column].content == '.' &&
+        @matrix[line][column + 1].content == '.' &&
+          @matrix[line + 1][column + 1].content == '.'
+
+        @matrix[line + 1][column].content = ''
+        @matrix[line][column + 1].content = ''
+        @matrix[line + 1][column + 1].content = ''
       end
-    # 2° superior direita
     elsif line == @width - 1 && column == 0
-      if @matrix[line - 1][column] == '.' && @matrix[line][column + 1] == '.' && @matrix[line - 1][column + 1] == '.'
-        @matrix[line - 1][column] = ''
-        @matrix[line][column + 1] = ''
-        @matrix[line - 1][column + 1] = ''
+      if @matrix[line - 1][column].content == '.' &&
+        @matrix[line][column + 1].content == '.' &&
+          @matrix[line - 1][column + 1].content == '.'
+
+        @matrix[line - 1][column].content = ''
+        @matrix[line][column + 1].content = ''
+        @matrix[line - 1][column + 1].content = ''
       end
-    # 3° inferior esquerda
     elsif line == 0 && column == @height - 1
-      if @matrix[line][column - 1] == '.' && @matrix[line + 1][column] == '.' && @matrix[line + 1][column - 1] == '.'
-        @matrix[line][column - 1] = ''
-        @matrix[line + 1][column] = ''
-        @matrix[line + 1][column - 1] = ''
+      if @matrix[line][column - 1].content == '.' &&
+        @matrix[line + 1][column].content == '.' &&
+          @matrix[line + 1][column - 1].content == '.'
+
+        @matrix[line][column - 1].content = ''
+        @matrix[line + 1][column].content = ''
+        @matrix[line + 1][column - 1].content = ''
       end
-    # 4° inferior direita
     elsif line == @width - 1 && column == @height - 1
-      if @matrix[line - 1][column] == '.' && @matrix[line][column - 1] == '.' && @matrix[line - 1][column - 1] == '.'
-        @matrix[line - 1][column] = ''
-        @matrix[line][column - 1] = ''
-        @matrix[line - 1][column - 1] = ''
+      if @matrix[line - 1][column].content == '.' &&
+        @matrix[line][column - 1].content == '.' &&
+          @matrix[line - 1][column - 1].content == '.'
+
+        @matrix[line - 1][column].content = ''
+        @matrix[line][column - 1].content = ''
+        @matrix[line - 1][column - 1].content = ''
       end
     elsif line == 0
-      if @matrix[line][column - 1] == '.' && @matrix[line + 1][column - 1] == '.' && @matrix[line + 1][column] == '.' && @matrix[line + 1][column + 1] == '.' && @matrix[line][column + 1] == '.'
-        @matrix[line][column - 1] = ''
-        @matrix[line + 1][column - 1] = ''
-        @matrix[line + 1][column] = ''
-        @matrix[line + 1][column + 1] = ''
-        @matrix[line][column + 1] = ''
+      if @matrix[line][column - 1].content == '.' &&
+        @matrix[line + 1][column - 1].content == '.' &&
+          @matrix[line + 1][column].content == '.' &&
+            @matrix[line + 1][column + 1].content == '.' &&
+              @matrix[line][column + 1].content == '.'
+
+        @matrix[line][column - 1].content = ''
+        @matrix[line + 1][column - 1].content = ''
+        @matrix[line + 1][column].content = ''
+        @matrix[line + 1][column + 1].content = ''
+        @matrix[line][column + 1].content = ''
       end
     elsif column == 0
-      if @matrix[line -1][column] == '.' && @matrix[line - 1][column + 1] == '.' && @matrix[line][column + 1] == '.' && @matrix[line + 1][column + 1] == '.' && @matrix[line + 1][column] == '.'
-        @matrix[line -1][column] = ''
-        @matrix[line - 1][column + 1] = ''
-        @matrix[line][column + 1] = ''
-        @matrix[line + 1][column + 1] = ''
-        @matrix[line + 1][column] = ''
+      if @matrix[line -1][column].content == '.' &&
+        @matrix[line - 1][column + 1].content == '.' &&
+          @matrix[line][column + 1].content == '.' &&
+            @matrix[line + 1][column + 1].content == '.' &&
+              @matrix[line + 1][column].content == '.'
+
+        @matrix[line -1][column].content = ''
+        @matrix[line - 1][column + 1].content = ''
+        @matrix[line][column + 1].content = ''
+        @matrix[line + 1][column + 1].content = ''
+        @matrix[line + 1][column].content = ''
       end
     elsif line == @width - 1
-      if @matrix[line][column - 1] == '.' && @matrix[line - 1][column - 1] == '.' && @matrix[line - 1][column] == '.' && @matrix[line - 1][column + 1] == '.' && @matrix[line][column + 1] == '.'
-        @matrix[line][column - 1] = ''
-        @matrix[line - 1][column - 1] = ''
-        @matrix[line - 1][column] = ''
-        @matrix[line - 1][column + 1] = ''
-        @matrix[line][column + 1] = ''
+      if @matrix[line][column - 1].content == '.' &&
+        @matrix[line - 1][column - 1].content == '.' &&
+          @matrix[line - 1][column].content == '.' &&
+            @matrix[line - 1][column + 1].content == '.' &&
+              @matrix[line][column + 1].content == '.'
+
+        @matrix[line][column - 1].content = ''
+        @matrix[line - 1][column - 1].content = ''
+        @matrix[line - 1][column].content = ''
+        @matrix[line - 1][column + 1].content = ''
+        @matrix[line][column + 1].content = ''
       end
     elsif column == @height - 1
-      if @matrix[line - 1][column] == '.' && @matrix[line - 1][column - 1] == '.' && @matrix[line][column - 1] == '.' && @matrix[line + 1][column - 1] == '.' && @matrix[line + 1][column] == '.'
-        @matrix[line - 1][column] = ''
-        @matrix[line - 1][column - 1] = ''
-        @matrix[line][column - 1] = ''
-        @matrix[line + 1][column - 1] = ''
-        @matrix[line + 1][column] = ''
+      if @matrix[line - 1][column].content == '.' &&
+        @matrix[line - 1][column - 1].content == '.' &&
+          @matrix[line][column - 1].content == '.' &&
+            @matrix[line + 1][column - 1].content == '.' &&
+              @matrix[line + 1][column].content == '.'
+
+        @matrix[line - 1][column].content = ''
+        @matrix[line - 1][column - 1].content = ''
+        @matrix[line][column - 1].content = ''
+        @matrix[line + 1][column - 1].content = ''
+        @matrix[line + 1][column].content = ''
       end
     else
-      if @matrix[line][column - 1] == '.' && @matrix[line][column + 1] == '.' &&
-          @matrix[line - 1][column] == '.' && @matrix[line + 1][column] == '.' &&
-            @matrix[line - 1][column - 1] == '.' && @matrix[line - 1][column + 1] == '.' &&
-              @matrix[line + 1][column - 1] == '.' && @matrix[line + 1][column + 1] == '.'
+      if @matrix[line][column - 1].content == '.' &&
+        @matrix[line][column + 1].content == '.' &&
+          @matrix[line - 1][column].content == '.' &&
+            @matrix[line + 1][column].content == '.' &&
+              @matrix[line - 1][column - 1].content == '.' &&
+                @matrix[line - 1][column + 1].content == '.' &&
+                  @matrix[line + 1][column - 1].content == '.' &&
+                    @matrix[line + 1][column + 1].content == '.'
 
-        @matrix[line][column - 1] = ''
-        @matrix[line][column + 1] = ''
-        @matrix[line - 1][column] = ''
-        @matrix[line + 1][column] = ''
-        @matrix[line - 1][column - 1] = ''
-        @matrix[line - 1][column + 1] = ''
-        @matrix[line + 1][column - 1] = ''
-        @matrix[line + 1][column + 1] = ''
+        @matrix[line][column - 1].content = ''
+        @matrix[line][column + 1].content = ''
+        @matrix[line - 1][column].content = ''
+        @matrix[line + 1][column].content = ''
+        @matrix[line - 1][column - 1].content = ''
+        @matrix[line - 1][column + 1].content = ''
+        @matrix[line + 1][column - 1].content = ''
+        @matrix[line + 1][column + 1].content = ''
       end
     end
   end
@@ -164,10 +221,10 @@ class Minesweeper
       for column in 0...quantity_columns
         print '[ '
 
-        if @matrix[line][column] == ''
+        if @matrix[line][column].content == ''
           print ' '
         else
-          print @matrix[line][column]
+          print @matrix[line][column].content
         end
 
         print ' ]'
