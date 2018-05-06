@@ -2,7 +2,8 @@ require 'matrix'
 require 'byebug'
 
 class PrettyPrinter
-  def self.print(matrix)
+  def self.print_matrix(matrix)
+    byebug
     quantity_lines   = matrix.count
     quantity_columns = matrix.first.count
 
@@ -254,44 +255,14 @@ class Minesweeper
     end
   end
 
-  def flag(line, column)
-    success = false
-    cell = @matrix[line][column]
-
-    unless cell.is_clear
-      cell.is_flag = true
-      success = true
-    end
-
-    success
-  end
 
   def board_state
-    # quantity_lines   = @matrix.count
-    # quantity_columns = @matrix.first.count
-
-    # for line in 0...quantity_lines
-    #   for column in 0...quantity_columns
-    #     print '[ '
-
-    #     if @matrix[line][column].content == ''
-    #       print ' '
-    #     else
-    #       print @matrix[line][column].content
-    #     end
-
-    #     print ' ]'
-    #   end
-
-    #   puts
-    # end
-
     matrix = []
     quantity_lines   = @matrix.count
     quantity_columns = @matrix.first.count
 
     for line in 0...quantity_lines
-      line = []
+      line_elements = []
 
       for column in 0...quantity_columns
         arround_mines = 0
@@ -459,13 +430,25 @@ class Minesweeper
           end
         end
 
-        line.push(arround_mines.to_s)
+        line_elements.push(arround_mines.to_s)
       end
 
-      matrix.push(line)
+      matrix.push(line_elements)
     end
 
     matrix
+  end
+
+  def flag(line, column)
+    success = false
+    cell = @matrix[line][column]
+
+    unless cell.is_clear
+      cell.is_flag = true
+      success = true
+    end
+
+    success
   end
 end
 
@@ -475,8 +458,7 @@ num_mines = 1
 game = Minesweeper.new(width, height, num_mines)
 
 while game.still_playing?
-  PrettyPrinter.print(game.board_state)
-
+  PrettyPrinter.print_matrix(game.board_state)
   puts "Digite a coordenada da linha"
   line = gets.to_i
 
