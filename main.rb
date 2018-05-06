@@ -3,7 +3,6 @@ require 'byebug'
 
 class PrettyPrinter
   def self.print_matrix(matrix)
-    byebug
     quantity_lines   = matrix.count
     quantity_columns = matrix.first.count
 
@@ -267,170 +266,174 @@ class Minesweeper
       for column in 0...quantity_columns
         arround_mines = 0
 
-        if line == 0 && column == 0
-          if @matrix[line + 1][column].content == '#'
-            arround_mines += 1
+        if @matrix[line][column].content == ''
+          if line == 0 && column == 0
+            if @matrix[line + 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column + 1].content == '#'
+              arround_mines += 1
+            end
+          elsif line == @width - 1 && column == 0
+            if @matrix[line - 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column + 1].content == '#'
+              arround_mines += 1
+            end
+          elsif line == 0 && column == @height - 1
+            if @matrix[line][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+          elsif line == @width - 1 && column == @height - 1
+            if @matrix[line - 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column - 1].content == '#'
+              arround_mines += 1
+            end
+          elsif line == 0
+            if @matrix[line][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line][column + 1].content == '#'
+              arround_mines += 1
+            end
+          elsif column == 0
+            if @matrix[line - 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column].content == '#'
+              arround_mines += 1
+            end
+          elsif line == @width - 1
+            if @matrix[line][column - 1].content == '.#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line][column + 1].content == '#'
+              arround_mines += 1
+            end
+          elsif column == @height - 1
+            if @matrix[line - 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column].content == '#'
+              arround_mines += 1
+            end
+          else
+            if @matrix[line][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line - 1][column + 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column - 1].content == '#'
+              arround_mines += 1
+            end
+
+            if @matrix[line + 1][column + 1].content == '#'
+              arround_mines += 1
+            end
           end
 
-          if @matrix[line][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column + 1].content == '#'
-            arround_mines += 1
-          end
-        elsif line == @width - 1 && column == 0
-          if @matrix[line - 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column + 1].content == '#'
-            arround_mines += 1
-          end
-        elsif line == 0 && column == @height - 1
-          if @matrix[line][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-        elsif line == @width - 1 && column == @height - 1
-          if @matrix[line - 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column - 1].content == '#'
-            arround_mines += 1
-          end
-        elsif line == 0
-          if @matrix[line][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line][column + 1].content == '#'
-            arround_mines += 1
-          end
-        elsif column == 0
-          if @matrix[line - 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column].content == '#'
-            arround_mines += 1
-          end
-        elsif line == @width - 1
-          if @matrix[line][column - 1].content == '.#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line][column + 1].content == '#'
-            arround_mines += 1
-          end
-        elsif column == @height - 1
-          if @matrix[line - 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column].content == '#'
-            arround_mines += 1
-          end
+          line_elements.push(arround_mines.to_s)
         else
-          if @matrix[line][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line - 1][column + 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column - 1].content == '#'
-            arround_mines += 1
-          end
-
-          if @matrix[line + 1][column + 1].content == '#'
-            arround_mines += 1
-          end
+          line_elements.push('.')
         end
-
-        line_elements.push(arround_mines.to_s)
       end
 
       matrix.push(line_elements)
